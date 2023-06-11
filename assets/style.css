@@ -322,7 +322,6 @@ footer nav ul {
 	flex-direction: column;
 	height: fit-content;
 	width: fit-content;
-	margin-top: 5%;
 }
 .form__log label {
 	margin-bottom: 5px;
@@ -588,7 +587,7 @@ footer nav ul {
 	align-items: center;
 	flex-direction: column;
 	background-color: #E8F1F7;
-	margin-top: 5%;
+	/* margin-top: 5%; */
 	position: relative;
 	height: 200px;
 }
@@ -658,6 +657,7 @@ footer nav ul {
 	font-family: 'syne';
 	justify-content: center;
 	margin-bottom: 1%;
+	margin-top: 1%;
 	padding: 2% 0;
 }
 
@@ -668,4 +668,11 @@ footer nav ul {
 .negative{
 	color: #fff;
 	background-color: #7a2424;
+}
+
+.show {
+	opacity: 1;
+}
+.hide {
+	opacity: 0;
 }

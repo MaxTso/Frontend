@@ -4,6 +4,19 @@ error.setAttribute('class', 'error');
 error.style.color = 'red';
 error.style.textAlign = 'center';
 
+
+function displayError(message){
+	const errorElement = document.getElementById('login__error')
+	errorElement.innerText = message
+	errorElement.style.visibility = 'visible'
+	errorElement.classList.add('negative')
+	const timeOfError = setTimeout(() => {
+		errorElement.style.visibility = 'hidden'
+		clearTimeout(timeOfError)
+	}, 3000)
+}
+
+
 // Recherche de l'élément login dans le menu de navigation afin de lui appliquer des propriétés spécifique
 document.querySelectorAll('nav li').forEach(value => {
 	if (value.innerText == "login"){
@@ -45,18 +58,10 @@ async function fetchCredential(jsonbody) {
 		window.location.href = '../index.html'
 	} else if (f.status == 401){
 		// Si il y a une erreur, on enlève la précédente erreur qui n'as potentiellement rien à voir avec celle ci
-		if (previousError !== null) {
-			previousError.remove();
-		}
 		// Et on affiche la raison actuelle
-		error.innerText = "Vous n'êtes pas authorisé à entrer"
-		login.insertBefore(error, login.firstChild);
+		displayError("Vous n'êtes pas authorisé à entrer")
 	} else if (f.status == 404) {
 		// Pareil que l'erreur ci dessus mais avec une raison d'erreur différente.
-		if (previousError !== null) {
-			previousError.remove();
-		}
-		error.innerText = "Aucun utilisateur trouvé"
-		login.insertBefore(error, login.firstChild);
+		displayError("Aucun utilisateur trouvé")
 	} throw new Error("Impossible de contacter l'api")
 }

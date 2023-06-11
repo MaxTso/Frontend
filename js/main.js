@@ -81,6 +81,7 @@ function project_modifier(){
 	port.insertBefore(divTitleProject, categorie)
 }
 
+// PARTIE INSERTION DYNAMIQUE DES PROJETS ET TRI
 
 // Appel de l'api afin d'obtenir tous les projets
 async function fetchAllProjectData() {
@@ -102,8 +103,6 @@ async function fetchCategoryData() {
 	}
 	throw new Error("Impossible de contacter l'API");
 }
-
-// PARTIE INSERTION DYNAMIQUE DES PROJETS ET TRI
 
 // Fonction de tri et de création des boutons de catégorie
 async function category() {
@@ -192,10 +191,11 @@ function addGalleryItem(src, name, categoryId, id) {
 // Fonction d'ajout des projets et catégories après chargement de la page
 async function pushElementAfterCall() {
 	// Récupération des résultats de l'appel à l'API
-	const t = await fetchAllProjectData();
+	const projectData = await fetchAllProjectData();
 	// Boucle sur les résultats de l'api pour ajouter les projets dans la gallerie et obtenir les catégories
-	for (let i = 0; i < t.length; i++) {
-		addGalleryItem(t[i]["imageUrl"], t[i]["title"], t[i]["categoryId"], t[i]['id']);
+	for (let project of projectData) {
+		let {id, title, imageUrl, categoryId} = project
+		addGalleryItem(imageUrl, title, categoryId, id);
 	}
 	await category();
 }

@@ -1,4 +1,5 @@
 const focusableElement = 'button, select, input';
+const [homePageConfirm, editProjectConfirm] = ['homePage__confirm', 'editproject__confirm']
 let focusables = []
 let modal_home = document.querySelector('.modal__homepage');
 let modal_editproject = document.querySelector('.modal__editproject');
@@ -20,7 +21,7 @@ let modal_change = false;
 function findFocusElementOnActualPage () {
 	let homePage = document.querySelector('.modal__homepage')
 	let editPage = document.querySelector('.modal__editproject')
-	if (homePage.classList.contains('modal__section__show')){
+	if (homePage.classList.contains(showClassModal)){
 		focusables = Array.from(homePage.querySelectorAll(focusableElement))
 	} else {
 		focusables = Array.from(editPage.querySelectorAll(focusableElement))
@@ -46,24 +47,44 @@ function focusInModal(e){
 
 
 // Fonction d'affichage d'un message de succès
-function showPositiveMessage(message, parent, child){
-    let okMessage = document.createElement('p')
+function showPositiveMessage(message, id){
+    let okMessage = document.getElementById(id)
+    switch(id){
+        case editProjectConfirm:
+            okMessage.style.width = '80%';
+            break
+        case homePageConfirm:
+            okMessage.style.width = '100%'
+            break
+    }
     okMessage.setAttribute('class', 'confirm positive')
+    okMessage.style.visibility = 'visible'
     okMessage.innerText = message
-    parent.insertBefore(okMessage, child)
     const timeout = setTimeout(() => {
-        okMessage.remove()
-    }, 5000)
+        okMessage.style.visibility = 'hidden';
+        clearTimeout(timeout)
+    }, 3000)
 }
+
+
 //Fonction d'affichage d'un message d'erreur
-function showNegativeMessage(message, parent, child){
-    let okMessage = document.createElement('p')
-    okMessage.setAttribute('class', 'confirm negative')
+function showNegativeMessage(message, id){
+    let okMessage = document.getElementById(id)
+    switch(id){
+        case editProjectConfirm:
+            okMessage.style.width = '80%';
+            break
+        case homePageConfirm:
+            okMessage.style.width = '100%'
+            break
+    }
+    okMessage.setAttribute('class', 'confirm positive')
+    okMessage.style.visibility = 'visible'
     okMessage.innerText = message
-    parent.insertBefore(okMessage, child)
     const timeout = setTimeout(() => {
-        okMessage.remove()
-    }, 5000)
+        okMessage.style.visibility = 'hidden';
+        clearTimeout(timeout)
+    }, 3000)
 }
 
 
@@ -131,13 +152,9 @@ async function deleteWork(id, modalId) {
         document.getElementById(`${modalId}`).remove()
         document.getElementById(`${id}`).remove()
         modal_change = true
-        if (!document.querySelector('.confirm')){
-            showPositiveMessage('Suppression réussie', modal_homePageBox, modal_homePageBox.children[1])
-        }
+        showPositiveMessage('Suppression réussie', homePageConfirm)
     } else {
-        if (!document.querySelector('.confirm')){
-            showNegativeMessage('La suppression a échouée', modal_homePageBox, modal_homePageBox.children[1])
-        }
+        showNegativeMessage('La Suppression à échoué', homePageConfirm)
         
     }
 };
@@ -287,28 +304,17 @@ button.addEventListener('click', () => {
         if (request.status === 201){
             reset_form()
             reload()
-            if (!messageResult){
-                showPositiveMessage(`Envoi de " ${title_value}" réussi`, form, form.firstChild)
-            }
+            showPositiveMessage(`Envoi de " ${title_value}" réussi`, editProjectConfirm)
             modal_change = true
         } else if (request.status === 400){
             resetFormAddPhoto()
-            if (messageResult){
-                messageResult.remove()
-            }
-            showNegativeMessage("L'envoi a échoué, formulaire incorrecte", modal_homePageBox, modal_homePageBox.children[1])
+            showNegativeMessage("L'envoi a échoué, formulaire incorrecte", editProjectConfirm)
         } else if (request.status === 401){
             resetFormAddPhoto()
-            if (messageResult){
-                messageResult.remove()
-            }
-            showNegativeMessage("Vous n'êtes pas authorisé à envoyer la photo", modal_homePageBox, modal_homePageBox.children[1])
+            showNegativeMessage("Vous n'êtes pas authorisé à envoyer la photo", editProjectConfirm)
         } else if (request.status === 500){
             resetFormAddPhoto()
-            if (messageResult){
-                messageResult.remove()
-            }
-            showNegativeMessage("L'envoi a échoué, formulaire incorrecte", modal_homePageBox, modal_homePageBox.children[1])
+            showNegativeMessage("L'envoi a échoué, formulaire incorrecte", editProjectConfirm)
         }
     } 
     // Envoie de la requête avec en paramètre le Formdata
