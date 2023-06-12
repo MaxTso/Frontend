@@ -1,7 +1,13 @@
+import { local } from "./api.js";
+import { 
+    T,
+    reload
+} from "./main.js"
 const focusableElement = 'button, select, input';
 const [homePageConfirm, editProjectConfirm] = ['homePage__confirm', 'editproject__confirm']
 let focusables = []
 let modal_home = document.querySelector('.modal__homepage');
+const modalContent = document.querySelector('.modal__content');
 let modal_editproject = document.querySelector('.modal__editproject');
 let modal_editproject_categorie = document.getElementById('categorie_select');
 let modal_addfile = document.getElementById('add_file');
@@ -16,9 +22,15 @@ let showClassModal = 'modal__section__show';
 let hideClassModal = 'modal__section__hide';
 
 let modal_change = false;
+export {modal_change}
+function isChange(bool){
+    modal_change = bool
+}
+export {isChange}
+
 
 // Fonction permettant de dire quels sont les éléments focusables dans la page modal actuelle
-function findFocusElementOnActualPage () {
+export function findFocusElementOnActualPage () {
 	let homePage = document.querySelector('.modal__homepage')
 	let editPage = document.querySelector('.modal__editproject')
 	if (homePage.classList.contains(showClassModal)){
@@ -27,6 +39,7 @@ function findFocusElementOnActualPage () {
 		focusables = Array.from(editPage.querySelectorAll(focusableElement))
 	}
 }
+
 
 // Fonction permettant de focus les éléments présent dans la page modal actuelle
 function focusInModal(e){
@@ -44,6 +57,7 @@ function focusInModal(e){
 	}
 	focusables[index].focus();
 }
+export {focusInModal}
 
 
 // Fonction d'affichage d'un message de succès
@@ -126,7 +140,7 @@ function modalHomeGallery(){
     })
     box.children[0].appendChild(moveitem());
 }
-
+export {modalHomeGallery}
 
 // Fonction d'effacement de la gallerie modale afin de remettre une nouvelle version lors de la prochaine ouverture
 function removeWhenClose(){
@@ -134,12 +148,13 @@ function removeWhenClose(){
     while (modal_gallery.firstChild){
         modal_gallery.removeChild(modal_gallery.lastChild)
 }}
+export {removeWhenClose}
 
 
 // Fonction de suppression de projet
 async function deleteWork(id, modalId) {
 	// Envoi des données du formulaire avec l'id du lien en paramètre de la fonction
-	const f = await fetch(`http://localhost:5678/api/works/${id}`, {
+	const f = await fetch(`${local}api/works/${id}`, {
 		method:'DELETE',
 		headers: {
 			Accept: "application/json",
@@ -171,6 +186,7 @@ function modalHomepageShow(){
         modal_editproject.classList.add(hideClassModal)
     }
 }
+export {modalHomepageShow}
 
 // Affiche la page modale d'ajout de photo
 function modalEditProjectShow(){
@@ -200,10 +216,14 @@ function reset_form() {
     modal_editproject_categorie.value = ''
     button.setAttribute('disabled', true)
 }
+export {reset_form}
 
 // Fonction permettant de savoir si tous les champs sont remplis afin de débloquer le bouton valider
 function form_check () {
-    if (modal_editproject_categorie.value || modal_editproject_categorie.value === '' && modal_titleadd.value && document.querySelector('.imported_image')){
+    console.log(modal_editproject_categorie.value);
+    console.log(modal_titleadd.value);
+    console.log(document.querySelector('.imported_image'));
+    if (modal_editproject_categorie.value && modal_titleadd.value && document.querySelector('.imported_image')){
         button.removeAttribute('disabled')
     } 
     else {

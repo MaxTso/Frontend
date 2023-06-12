@@ -1,3 +1,14 @@
+import { local } from "./api.js";
+import {
+	focusInModal,
+	modalHomeGallery,
+	removeWhenClose,
+	modalHomepageShow,
+	modal_change,
+	isChange,
+	findFocusElementOnActualPage,
+	reset_form
+} from  "./modal.js";
 const selectModal = document.querySelector(".modal");
 const modal = document.getElementById(selectModal.getAttribute('id'))
 const modalContent = document.querySelector('.modal__content');
@@ -6,6 +17,8 @@ let categorie = document.querySelector(".categorie");
 let body = document.querySelector('body');
 let connect = false;
 let T;
+
+export {T}
 
 // MODIFICATION DOM PARTIE ADMINISTRATEUR
 // Création de l'overlay et ajout à la page.
@@ -85,7 +98,7 @@ function project_modifier(){
 
 // Appel de l'api afin d'obtenir tous les projets
 async function fetchAllProjectData() {
-	const f = await fetch("http://localhost:5678/api/works");
+	const f = await fetch(`${local}api/works`);
 	if (f.ok === true) {
 		const data = await f.json();
 		return data;
@@ -96,7 +109,7 @@ async function fetchAllProjectData() {
 
 // Appel de l'api afin d'obtenir toutes les catégories
 async function fetchCategoryData() {
-	const f = await fetch("http://localhost:5678/api/categories");
+	const f = await fetch(`${local}api/categories`);
 	if (f.ok === true) {
 		const data = await f.json();
 		return data;
@@ -202,7 +215,7 @@ async function pushElementAfterCall() {
 
 
 // Fonction de rechargement de tous les projets avec la suppression de ceux afficher et un nouvel appel à l'api pour réafficher les élements
-function reload() {
+export function reload() {
 	document.querySelectorAll(".gallery figure").forEach(element => {
 		element.remove()
 	})
@@ -254,7 +267,7 @@ if (connect) {
 		modal.style.display = "flex";
 		modalHomeGallery();
 		modalHomepageShow();
-		modal_change = false;
+		isChange(false);
 		findFocusElementOnActualPage()
 	})
 	// Permet de quitter la modale en cliquant à côté de la modale

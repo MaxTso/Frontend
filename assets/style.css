@@ -179,7 +179,9 @@ nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
-
+nav li a {
+	text-decoration: none;
+}
 li:hover {
 	color: #b1663c;
 }
@@ -587,7 +589,6 @@ footer nav ul {
 	align-items: center;
 	flex-direction: column;
 	background-color: #E8F1F7;
-	/* margin-top: 5%; */
 	position: relative;
 	height: 200px;
 }
